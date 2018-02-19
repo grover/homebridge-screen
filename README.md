@@ -13,7 +13,7 @@ A homebridge plugin for motorized projection screens that are connected via RS23
 
 After [Homebridge](https://github.com/nfarina/homebridge) has been installed:
 
- ```sudo npm install -g homebridge-screen```
+ ```sudo npm install -g homebridge-screen --unsafe-perm```
 
 ### Configuration
 

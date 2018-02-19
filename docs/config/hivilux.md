@@ -8,15 +8,11 @@ an RS485 connected TXN screen from [Hivilux](https://www.hivilux.de).
 Hivilux tension screens (but likely not all) are manufactured in China by Jampo. As such they likely share the command 
 protocol with other rebranded projection screens:
 
+| Command | Hex-Bytes |
 |----|----|
-| Command | Bytes |
-|----|----|
-| up | |
-|----|----|
-| down | |
-|----|----|
-| stop | |
-|----|----|
+| up | FFEEEEEEDD|
+| down | FFEEEEEEEE |
+| stop | FFEEEEEECC |
 
 Unfortunately these screens lack positional feedback or command responses. As such it is impossible to determine if the
 command has been accepted, rejected, is in progress or has completed.
@@ -33,7 +29,7 @@ Make sure you disable the serial login shell on the RPi, but keep the serial por
 I've already [written](https://github.com/grover/homebridge-ranger/blob/HEAD/docs/install/raspberrypi.md) a good tutorial on installing the Raspberry Pi Zero W from scratch. You can follow that guide until you get to the Bluetooth stuff. After that:
 
 ```bash
-sudo npm install -g homebridge-screen
+sudo npm install -g homebridge-screen --unsafe-perm
 ```
 
 ## Configure homebridge
