@@ -1,6 +1,6 @@
 {
   "name": "homebridge-screen",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Homebridge plugin for Hivilux projection screens",
   "main": "src/index.js",
   "scripts": {
