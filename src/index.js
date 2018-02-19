@@ -26,7 +26,7 @@ module.exports = (homebridge) => {
 const ScreenPlatform = class {
   constructor(log, config, api) {
     this.log = log;
-    this.log('ScreenPlatform Plugin Loaded - Version ${version}');
+    this.log(`ScreenPlatform Plugin Loaded - Version ${version}`);
     this.config = config;
     this.api = api;
   }
