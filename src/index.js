@@ -26,17 +26,19 @@ module.exports = (homebridge) => {
 const ScreenPlatform = class {
   constructor(log, config, api) {
     this.log = log;
-    this.log('ScreenPlatform Plugin Loaded');
+    this.log('ScreenPlatform Plugin Loaded - Version ${version}');
     this.config = config;
     this.api = api;
   }
 
   accessories(callback) {
-    this.config.version = version;
+    const accessories = [];
 
-    const accessories = [
-      new ScreenAccessory(this.api, this.log, this.config)
-    ];
+    this.config.screens.forEach(screen => {
+      screen.version = version;
+
+      accessories.push(new ScreenAccessory(this.api, this.log, screen));
+    });
 
     callback(accessories);
   }

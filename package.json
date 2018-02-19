@@ -1,6 +1,6 @@
 {
   "name": "homebridge-screen",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Homebridge plugin for Hivilux projection screens",
   "main": "src/index.js",
   "scripts": {
@@ -28,5 +28,12 @@
   "devDependencies": {
     "eslint": "^4.18.0",
     "npm-github-release": "^0.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/grover/homebridge-screen.git"
+  },
+  "bugs": {
+    "url": "http://github.com/grover/homebridge-screen/issues"
   }
 }
