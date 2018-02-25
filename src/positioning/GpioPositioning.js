@@ -67,7 +67,6 @@ class GpioPositioning extends EventEmitter {
     this.log('Update position information');
 
     let pinValue = rpio.read(this.config.pin);
-    this._update
     if (pinValue != this._pinValue) {
       this._pinValue = pinValue;
 
