@@ -19,7 +19,12 @@
   "author": "Michael Froehlich",
   "license": "MIT",
   "dependencies": {
+    "debounce": "^1.1.0",
+    "detect-rpi": "^1.2.0",
     "serialport": "^6.0.4"
+  },
+  "optionalDependencies": {
+    "rpio": "^0.9.20"
   },
   "engines": {
     "node": ">=8.9.3",

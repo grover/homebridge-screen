@@ -1,6 +1,7 @@
 'use strict';
 
 const Screens = require('./screens/Screens');
+const PositioningFactory = require('./positioning/Factory');
 
 let Accessory, Characteristic, Service;
 
@@ -18,6 +19,9 @@ class ScreenAccessory {
 
     this._screen = Screens.byName(this.config.model, this.log, this.config);
     this._screen.on('reachable', this._setReachable.bind(this));
+
+    this._positioning = PositioningFactory.create(this.log, this._screen, this.config.positioning);
+    this._positioning.on('position', this._positionChanged.bind(this));
 
     this._services = this.createServices();
   }
@@ -106,11 +110,8 @@ class ScreenAccessory {
     callback(undefined);
 
     setTimeout(() => {
-      this._windowCovering
-        .getCharacteristic(Characteristic.CurrentPosition)
-        .updateValue(value);
       this._signalMoving(Characteristic.PositionState.STOPPED);
-    }, 30000);
+    }, 20000);
   }
 
   async _setHold(value, callback) {
@@ -141,6 +142,20 @@ class ScreenAccessory {
     this._windowCovering
       .getCharacteristic(Characteristic.PositionState)
       .updateValue(state);
+  }
+
+  _positionChanged(state) {
+    const value = state === 'up' ? 0 : 100;
+
+    this._windowCovering
+      .getCharacteristic(Characteristic.CurrentPosition)
+      .updateValue(value);
+
+    this._windowCovering
+      .getCharacteristic(Characteristic.TargetPosition)
+      .updateValue(value);
+
+    this._signalMoving(Characteristic.PositionState.STOPPED);
   }
 }
 
