@@ -20,6 +20,7 @@ After [Homebridge](https://github.com/nfarina/homebridge) has been installed:
 The configuration depends upon the supported projection screen. At the moment the following projection screens are supported:
 
 * [Hivilux Motorized Tension Screens](docs/config/hivilux.md)
+* [Generic GPIO-controlled Motorized Screens like DaLite Contour](docs/config/gpioscreen.md)
 
 The platform can operate any number of screens that have to be predefined in the homebridge config.json.
 
