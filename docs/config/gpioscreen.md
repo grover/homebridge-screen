@@ -11,7 +11,9 @@ command has been accepted, rejected, is in progress or has completed.
 
 I'm running the projection screen with a [Raspberry Pi Zero W](https://www.raspberrypi.org/products/raspberry-pi-zero-w/) with two transistors used to connect the `up`/`down` with the `common` connections on the projector control board.  The control is simple: close the circuit between `up` and `common` to raise, `down` and `common` to lower, and both simultaneously to stop.  
 
-In my case I'm using GPIO outputs connected to 1kOhm resistors driving the base of two 2N4401 transistors.  Both the transistors' emitters and the projector control board's `common` connection all tied to ground on the Pi.  Twin relays would work as well. 
+In my case I'm using GPIO outputs connected to 1kOhm resistors driving the base of two 2N4401 transistors.  Both the transistors' emitters and the projector control board's `common` connection all tied to ground on the Pi.  Twin relays would work as well.  An example of the screen controller GPIO interface with a Pi Zero W:
+
+![GPIO DaLite Screen Control Setup](gpiodalite.jpg)
 
 ## Software installation
 
