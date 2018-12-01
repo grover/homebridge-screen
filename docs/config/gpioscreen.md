@@ -13,6 +13,8 @@ I'm running the projection screen with a [Raspberry Pi Zero W](https://www.raspb
 
 In my case I'm using GPIO outputs connected to 1kOhm resistors driving the base of two 2N4401 transistors.  Both the transistors' emitters and the projector control board's `common` connection all tied to ground on the Pi.  Twin relays would work as well. 
 
+![GPIO DaLite Screen Control Setup](gpiodalite.jpg)
+
 ## Software installation
 
 ```bash
