@@ -1,7 +1,8 @@
 'use strict';
 
 const ScreenTypes = {
-  'Hivilux': require('./Hivilux')
+  'Hivilux': require('./Hivilux'),
+  'GPIOScreen': require('./GPIOScreen')
 };
 
 

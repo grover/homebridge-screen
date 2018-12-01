@@ -1,7 +1,7 @@
 'use strict';
 
 const EventEmitter = require('events').EventEmitter;
-const rpio=require('rpio-pi')
+const rpio=require('rpio')
 
 class GPIOScreen extends EventEmitter {
   constructor(log, config) {
@@ -34,14 +34,14 @@ class GPIOScreen extends EventEmitter {
     rpio.write(this.config.pinup,rpio.HIGH);
     rpio.write(this.config.pindown,rpio.HIGH);
     setTimeout(() => {
-      rpio.write(this.config.pindown,rpio.LOW);
       rpio.write(this.config.pinup,rpio.LOW);
+      rpio.write(this.config.pindown,rpio.LOW);
     },this.config.writetime || 1000);
   }
   
   _setupPins() {
-    rpio.open(this.config.pinup, rpio.OUTPUT, rpi.LOW);
-    rpio.open(this.config.pindown, rpio.OUTPUT, rpi.LOW);
+    rpio.open(this.config.pinup, rpio.OUTPUT, rpio.LOW);
+    rpio.open(this.config.pindown, rpio.OUTPUT, rpio.LOW);
   }
 }
 
