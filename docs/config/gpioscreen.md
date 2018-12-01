@@ -15,6 +15,8 @@ In my case I'm using GPIO outputs connected to 1kOhm resistors driving the base 
 
 ![GPIO DaLite Screen Control Setup](gpiodalite.jpg)
 
+![GPIO DaLite Screen Control Setup](gpiodalite.jpg)
+
 ## Software installation
 
 ```bash
