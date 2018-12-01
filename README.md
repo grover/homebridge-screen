@@ -1,6 +1,6 @@
 # homebridge-screen
 
-A homebridge plugin for motorized projection screens that are connected via RS232 or RS485.
+A homebridge plugin for motorized projection screens.
 
 ## Status
 

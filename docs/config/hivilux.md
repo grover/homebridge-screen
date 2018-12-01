@@ -1,12 +1,10 @@
 # Hivilux Motorized Tension Screens
 
-The plugin supports RS485 or RS232 operated, motorized tension screens from Hivilux. I have tested the plugin using 
-an RS485 connected TXN screen from [Hivilux](https://www.hivilux.de).
+The plugin supports RS485 or RS232 operated, motorized tension screens from Hivilux. I have tested the plugin using an RS485 connected TXN screen from [Hivilux](https://www.hivilux.de).
 
 ## Hivilux Command Protocol
 
-Hivilux tension screens (but likely not all) are manufactured in China by Jampo. As such they likely share the command 
-protocol with other rebranded projection screens:
+Hivilux tension screens (but likely not all) are manufactured in China by Jampo. As such they likely share the serial command protocol with other rebranded projection screens:
 
 | Command | Hex-Bytes |
 |----|----|
@@ -14,8 +12,7 @@ protocol with other rebranded projection screens:
 | down | FFEEEEEEEE |
 | stop | FFEEEEEECC |
 
-Unfortunately these screens lack positional feedback or command responses. As such it is impossible to determine if the
-command has been accepted, rejected, is in progress or has completed.
+Unfortunately these screens lack positional feedback or command responses. As such it is impossible to determine if the command has been accepted, rejected, is in progress or has completed.  See below for an alternative positioning system.
 
 ## Hardware setup
 
