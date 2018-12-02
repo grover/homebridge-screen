@@ -108,10 +108,11 @@ class ScreenAccessory {
     }
 
     callback(undefined);
-
+    this.log("About to signal")
     setTimeout(() => {
+      this.log("Signaling end of move");
       this._signalMoving(Characteristic.PositionState.STOPPED);
-    }, 20000);
+    }, 1000 * (this.config.screenDeploysInSeconds || 20));
   }
 
   async _setHold(value, callback) {
