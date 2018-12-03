@@ -68,12 +68,14 @@ class ScreenAccessory {
     this._windowCovering.getCharacteristic(Characteristic.HoldPosition)
       .updateValue(false)
       .on('set', this._setHold.bind(this));
-
+      
     this._windowCovering.getCharacteristic(Characteristic.CurrentPosition)
       .updateValue(0);
+      .on('get', this._getCurrentPosition.bind(this));
 
     this._windowCovering.getCharacteristic(Characteristic.PositionState)
-      .updateValue(Characteristic.PositionState.STOPPED);
+      .updateValue(Characteristic.PositionState.STOPPED)
+      .on('get', this._getPositionState.bind(this));
 
     return this._windowCovering;
   }
@@ -100,6 +102,8 @@ class ScreenAccessory {
 
     this._signalMoving(direction);
 
+    this._MoveTime = new Date();
+    this.log("Starting Move at :" + this._moveTime);
     if (direction === Characteristic.PositionState.DECREASING) {
       await this._screen.up();
     }
@@ -107,12 +111,11 @@ class ScreenAccessory {
       await this._screen.down();
     }
 
-    callback(undefined);
-    this.log("About to signal")
     setTimeout(() => {
-      this.log("Signaling end of move");
       this._signalMoving(Characteristic.PositionState.STOPPED);
-    }, 1000 * (this.config.screenDeploysInSeconds || 20));
+      this._MoveTime=null;
+    }, 1000 * this.config.screenDeployTime);
+    callback(undefined);
   }
 
   async _setHold(value, callback) {
@@ -139,7 +142,20 @@ class ScreenAccessory {
     this._signalMoving(Characteristic.PositionState.STOPPED);
   }
 
+  _getPositionState(callback) {
+    this.log("Returning state: " + this._state);
+    callback(null, this._state);
+  }
+  
+  _getCurrentPosition(callback) {
+    this.log("Returning position");
+    callback(null,this._MoveTime?
+	     Math.floor((new Date() - this._MoveTime)/1000/
+			this.config.screenDeployTime):);
+  }
+  
   _signalMoving(state) {
+    this._state=state;
     this._windowCovering
       .getCharacteristic(Characteristic.PositionState)
       .updateValue(state);
