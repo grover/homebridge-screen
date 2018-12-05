@@ -14,8 +14,10 @@ class ScreenAccessory {
     this.log = log;
     this.name = config.name;
     this.version = config.version;
-    this.config = config;
 
+    config.screenDeployTime=config.screenDeployTime || 20;
+    this.config = config;
+    
     this._screen = Screens.byName(this.config.model, this.log, this.config);
 
     this._positioning = PositioningFactory.create(this.log, this._screen, this.config.positioning);

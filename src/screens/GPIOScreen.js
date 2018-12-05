@@ -8,6 +8,7 @@ class GPIOScreen extends EventEmitter {
     super();
     this.log = log;
     this.config = config;
+    this.config.writeTime=this.config.writeTime || 1;
     this._setupPins();
     this.emit('reachable', true);
   }
