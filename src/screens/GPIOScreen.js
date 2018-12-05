@@ -15,31 +15,29 @@ class GPIOScreen extends EventEmitter {
 
   up() {
     this.log('Sending up command');
-    rpio.write(this.config.pinup,rpio.HIGH);
-    setTimeout(() => {
-      rpio.write(this.config.pinup,rpio.LOW)
-    },this.config.writetime || 1000);
+    return this._sendCommand(this.config.pinup);
   }
 
   down() {
     this.log('Sending down command');
-    rpio.write(this.config.pindown,rpio.HIGH);
-    setTimeout(() => {
-      rpio.write(this.config.pindown,rpio.LOW)
-    },this.config.writetime || 1000);
-
-  }
+    return this._sendCommand(this.config.pindown);
+  }		      
 
   stop() {
     this.log('Sending stop command');
-    rpio.write(this.config.pinup,rpio.HIGH);
-    rpio.write(this.config.pindown,rpio.HIGH);
-    setTimeout(() => {
-      rpio.write(this.config.pinup,rpio.LOW);
-      rpio.write(this.config.pindown,rpio.LOW);
-    },this.config.writetime || 1000);
+    return this._sendCommand(this.config.pinup,this.config.pindown);
   }
-  
+
+  _sendCommand(...commands) {
+    commands.forEach(com => rpio.write(com,rpio.HIGH));
+    return new Promise(resolve => {
+      setTimeout(() => {
+	commands.forEach(com => rpio.write(com,rpio.LOW));
+	resolve();
+      },this.config.writeTime * 1000);
+    });
+  }
+ 
   _setupPins() {
     rpio.open(this.config.pinup, rpio.OUTPUT, rpio.LOW);
     rpio.open(this.config.pindown, rpio.OUTPUT, rpio.LOW);
