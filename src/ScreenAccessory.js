@@ -19,6 +19,7 @@ class ScreenAccessory {
     this.config = config;
     
     this._screen = Screens.byName(this.config.model, this.log, this.config);
+    this._screen.on('reachable', this._setReachable.bind(this));
 
     this._positioning = PositioningFactory.create(this.log, this._screen, this.config.positioning);
     this._positioning.on('position', this._positionChanged.bind(this));
@@ -50,6 +51,7 @@ class ScreenAccessory {
   getWindowCoveringService() {
     this._windowCovering = new Service.WindowCovering(this.name);
 
+    this._windowCovering.addOptionalCharacteristic(Characteristic.StatusFault)
     this._windowCovering.getCharacteristic(Characteristic.TargetPosition)
       .setProps({ minStep: 100 })
       .on('get', this._getTargetPosition.bind(this))
@@ -71,6 +73,15 @@ class ScreenAccessory {
     callback();
   }
 
+  _setReachable(reachable) {
+    this._reachibility=reachable
+    this._windowCovering
+      .getCharacteristic(Characteristic.StatusFault)
+      .updateValue(reachable?
+		   Characteristic.StatusFault.NO_FAULT:
+		   Characteristic.StatusFault.GENERAL_FAULT);
+  }
+  
   async _setTargetPosition(value, callback) {
     this.log(`A New target position ${value}`);
     this._targetPosition=value;
@@ -124,8 +135,15 @@ class ScreenAccessory {
     this._signalMoving(Characteristic.PositionState.STOPPED);
   }
 
+  _callIfReachable(callback,value) {
+    if (this._reachable===undefined || this._reachable) 
+      callback(null,value);
+    else
+      callback(new Error("No connection."));
+  }
+
   _getPositionState(callback) {
-    callback(null, this._state);
+    this._callIfReachable(callback, this._state);
   }
   
   _getCurrentPosition(callback) {
@@ -135,11 +153,11 @@ class ScreenAccessory {
 				  this.config.screenDeployTime,1));
     }
     this._position=this._position || 0;
-    callback(null,this._position);
+    this._callIfReachable(callback,this._position);
   }
 
   _getTargetPosition(callback) {
-    callback(null,this._targetPosition);
+    this._callIfReachable(callback,this._targetPosition);
   }
   
   _signalMoving(state) {
