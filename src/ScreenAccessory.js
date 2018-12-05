@@ -6,7 +6,6 @@ const PositioningFactory = require('./positioning/Factory');
 let Accessory, Characteristic, Service;
 
 class ScreenAccessory {
-
   constructor(api, log, config) {
     Accessory = api.hap.Accessory;
     Characteristic = api.hap.Characteristic;
@@ -18,7 +17,6 @@ class ScreenAccessory {
     this.config = config;
 
     this._screen = Screens.byName(this.config.model, this.log, this.config);
-    this._screen.on('reachable', this._setReachable.bind(this));
 
     this._positioning = PositioningFactory.create(this.log, this._screen, this.config.positioning);
     this._positioning.on('position', this._positionChanged.bind(this));
@@ -32,9 +30,8 @@ class ScreenAccessory {
 
   createServices() {
     return [
-      this.getAccessoryInformationService(),
-      this.getBridgingStateService(),
-      this.getWindowCoveringService()
+      this.getWindowCoveringService(),
+      this.getAccessoryInformationService()
     ];
   }
 
@@ -46,16 +43,6 @@ class ScreenAccessory {
       .setCharacteristic(Characteristic.SerialNumber, '99')
       .setCharacteristic(Characteristic.FirmwareRevision, this.version)
       .setCharacteristic(Characteristic.HardwareRevision, this.version);
-  }
-
-  getBridgingStateService() {
-    this._bridgingStateService = new Service.BridgingState()
-      .setCharacteristic(Characteristic.Reachable, false)
-      .setCharacteristic(Characteristic.LinkQuality, 4)
-      .setCharacteristic(Characteristic.AccessoryIdentifier, this.name)
-      .setCharacteristic(Characteristic.Category, Accessory.Categories.WINDOW_COVERING);
-
-    return this._bridgingStateService;
   }
 
   getWindowCoveringService() {
@@ -83,12 +70,6 @@ class ScreenAccessory {
   identify(callback) {
     this.log(`Identify requested on ${this.name}`);
     callback();
-  }
-
-  _setReachable(reachable) {
-    this._bridgingStateService
-      .getCharacteristic(Characteristic.Reachable)
-      .updateValue(reachable);
   }
 
   async _setTargetPosition(value, callback) {
