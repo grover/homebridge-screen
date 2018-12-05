@@ -52,16 +52,13 @@ class ScreenAccessory {
 
     this._windowCovering.getCharacteristic(Characteristic.TargetPosition)
       .setProps({ minStep: 100 })
+      .on('get', this._getTargetPosition.bind(this))
       .on('set', this._setTargetPosition.bind(this));
 
-    this._windowCovering.getCharacteristic(Characteristic.HoldPosition)
-      .updateValue(false)
-      .on('set', this._setHold.bind(this));
-      
     this._windowCovering.getCharacteristic(Characteristic.CurrentPosition)
-      .updateValue(0);
+      .updateValue(0)
       .on('get', this._getCurrentPosition.bind(this));
-
+    
     this._windowCovering.getCharacteristic(Characteristic.PositionState)
       .updateValue(Characteristic.PositionState.STOPPED)
       .on('get', this._getPositionState.bind(this));
@@ -75,30 +72,31 @@ class ScreenAccessory {
   }
 
   async _setTargetPosition(value, callback) {
-    this.log(`New target position ${value}`);
-
-    this._resetHold();
+    this.log(`A New target position ${value}`);
+    this._targetPosition=value;
 
     const direction = value > 0
       ? Characteristic.PositionState.INCREASING
       : Characteristic.PositionState.DECREASING;
 
     this._signalMoving(direction);
+    this._moveTime = new Date();
 
-    this._MoveTime = new Date();
-    this.log("Starting Move at :" + this._moveTime);
     if (direction === Characteristic.PositionState.DECREASING) {
       await this._screen.up();
-    }
-    else {
+    } else {
       await this._screen.down();
     }
 
     setTimeout(() => {
+      callback(null);
+      this._position = value;
       this._signalMoving(Characteristic.PositionState.STOPPED);
-      this._MoveTime=null;
+      this._windowCovering
+	.getCharacteristic(Characteristic.CurrentPosition)
+	.updateValue(value);
+      this._moveTime=null;
     }, 1000 * this.config.screenDeployTime);
-    callback(undefined);
   }
 
   async _setHold(value, callback) {
@@ -110,7 +108,7 @@ class ScreenAccessory {
     this._hold = true;
     await this._transmitStop();
 
-    callback(undefined);
+    callback(null);
   }
 
   _resetHold() {
@@ -122,19 +120,26 @@ class ScreenAccessory {
 
   async _transmitStop() {
     await this._screen.stop();
+    this._position=0;
     this._signalMoving(Characteristic.PositionState.STOPPED);
   }
 
   _getPositionState(callback) {
-    this.log("Returning state: " + this._state);
     callback(null, this._state);
   }
   
   _getCurrentPosition(callback) {
-    this.log("Returning position");
-    callback(null,this._MoveTime?
-	     Math.floor((new Date() - this._MoveTime)/1000/
-			this.config.screenDeployTime):);
+    if (this._state != Characteristic.PositionState.STOPPED && this._moveTime) {
+      this._position=
+	Math.floor(100 * Math.min((new Date() - this._MoveTime)/1000/
+				  this.config.screenDeployTime,1));
+    }
+    this._position=this._position || 0;
+    callback(null,this._position);
+  }
+
+  _getTargetPosition(callback) {
+    callback(null,this._targetPosition);
   }
   
   _signalMoving(state) {
