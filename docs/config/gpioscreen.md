@@ -44,7 +44,7 @@ In you config.json, add the following configuration for the projection screen:
           "model": "GPIOScreen",
           "pinup": 32,
 	  "pindown": 36,
-	  "writetime": 1000
+	  "writeTime": 1
         }
       ]
     }
@@ -53,7 +53,7 @@ In you config.json, add the following configuration for the projection screen:
 ```
 
 - pinup/pindown: the _physical_ pin numbers which close the contacts to control the screen (up or down).  Activating both pins simultaneously stops the screen motion.
-- writetime: time in ms to pull pins high (optional: default 1000ms)
+- writeTime: time in seconds to pull pins high (optional: default 1 second)
 
 The above example is runnable with the hardware setup described above.
 
