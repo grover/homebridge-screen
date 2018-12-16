@@ -14,7 +14,6 @@ class ScreenAccessory {
     this.log = log;
     this.name = config.name;
     this.version = config.version;
-
     config.screenDeployTime=config.screenDeployTime || 20;
     this.config = config;
     
@@ -83,7 +82,7 @@ class ScreenAccessory {
   }
   
   async _setTargetPosition(value, callback) {
-    this.log(`A New target position ${value}`);
+    this.log(`Setting new target position ${value}`);
     this._targetPosition=value;
 
     const direction = value > 0
