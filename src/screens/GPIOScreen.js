@@ -1,7 +1,7 @@
 'use strict';
 
 const EventEmitter = require('events').EventEmitter;
-const rpio=require('rpio')
+const rpio=require('rpio');
 
 class GPIOScreen extends EventEmitter {
   constructor(log, config) {
@@ -21,7 +21,7 @@ class GPIOScreen extends EventEmitter {
   down() {
     this.log('Sending down command');
     return this._sendCommand(this.config.pindown);
-  }		      
+  }                   
 
   stop() {
     this.log('Sending stop command');
@@ -32,8 +32,8 @@ class GPIOScreen extends EventEmitter {
     commands.forEach(com => rpio.write(com,rpio.HIGH));
     return new Promise(resolve => {
       setTimeout(() => {
-	commands.forEach(com => rpio.write(com,rpio.LOW));
-	resolve();
+        commands.forEach(com => rpio.write(com,rpio.LOW));
+        resolve();
       },this.config.writeTime * 1000);
     });
   }

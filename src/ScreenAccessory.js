@@ -3,11 +3,10 @@
 const Screens = require('./screens/Screens');
 const PositioningFactory = require('./positioning/Factory');
 
-let Accessory, Characteristic, Service;
+let Characteristic, Service;
 
 class ScreenAccessory {
   constructor(api, log, config) {
-    Accessory = api.hap.Accessory;
     Characteristic = api.hap.Characteristic;
     Service = api.hap.Service;
 
@@ -50,7 +49,7 @@ class ScreenAccessory {
   getWindowCoveringService() {
     this._windowCovering = new Service.WindowCovering(this.name);
 
-    this._windowCovering.addOptionalCharacteristic(Characteristic.StatusFault)
+    this._windowCovering.addOptionalCharacteristic(Characteristic.StatusFault);
     this._windowCovering.getCharacteristic(Characteristic.TargetPosition)
       .setProps({ minStep: 100 })
       .on('get', this._getTargetPosition.bind(this))
@@ -73,12 +72,12 @@ class ScreenAccessory {
   }
 
   _setReachable(reachable) {
-    this._reachibility=reachable
+    this._reachibility=reachable;
     this._windowCovering
       .getCharacteristic(Characteristic.StatusFault)
       .updateValue(reachable?
-		   Characteristic.StatusFault.NO_FAULT:
-		   Characteristic.StatusFault.GENERAL_FAULT);
+        Characteristic.StatusFault.NO_FAULT:
+        Characteristic.StatusFault.GENERAL_FAULT);
   }
   
   async _setTargetPosition(value, callback) {
@@ -103,8 +102,8 @@ class ScreenAccessory {
       this._position = value;
       this._signalMoving(Characteristic.PositionState.STOPPED);
       this._windowCovering
-	.getCharacteristic(Characteristic.CurrentPosition)
-	.updateValue(value);
+        .getCharacteristic(Characteristic.CurrentPosition)
+        .updateValue(value);
       this._moveTime=null;
     }, 1000 * this.config.screenDeployTime);
   }
@@ -138,7 +137,7 @@ class ScreenAccessory {
     if (this._reachable===undefined || this._reachable) 
       callback(null,value);
     else
-      callback(new Error("No connection."));
+      callback(new Error('No connection.'));
   }
 
   _getPositionState(callback) {
@@ -148,8 +147,8 @@ class ScreenAccessory {
   _getCurrentPosition(callback) {
     if (this._state != Characteristic.PositionState.STOPPED && this._moveTime) {
       this._position=
-	Math.floor(100 * Math.min((new Date() - this._MoveTime)/1000/
-				  this.config.screenDeployTime,1));
+        Math.floor(100 * Math.min((new Date() - this._MoveTime)/1000/
+                                  this.config.screenDeployTime,1));
     }
     this._position=this._position || 0;
     this._callIfReachable(callback,this._position);
