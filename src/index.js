@@ -39,7 +39,6 @@ const ScreenPlatform = class {
 
       accessories.push(new ScreenAccessory(this.api, this.log, screen));
     });
-
     callback(accessories);
   }
 };

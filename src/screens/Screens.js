@@ -1,18 +1,16 @@
 'use strict';
-
 const ScreenTypes = {
-  'Hivilux': require('./Hivilux')
+  'Hivilux': true,
+  'GPIOScreen': true
 };
 
-
 function createScreenByName(name, log, config) {
-  const screenType = ScreenTypes[name];
-  if (screenType === undefined) {
+  if (ScreenTypes[name] === undefined) {
     const message = `Unknown screen model: ${name}`;
     log(message);
     throw new Error(message);
-  }
-
+  } 
+  var screenType=require(`./${name}`);
   return new screenType(log, config);
 }
 
